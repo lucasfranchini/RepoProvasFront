@@ -1,10 +1,17 @@
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import GlobalStyles from "./styles/GlobalStyle";
 
 
 function App() {
   return (
-    <div>
-      
-    </div>
+    <BrowserRouter>
+    <GlobalStyles/>
+      <Switch>
+        <Route path='/' exact>
+
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
