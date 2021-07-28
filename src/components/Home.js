@@ -39,5 +39,8 @@ const Buttons =styled.div`
         text-align: center;
         padding: 5px;
         cursor: pointer;
+        &:hover{
+            background: #222;
+        }
     }
 `

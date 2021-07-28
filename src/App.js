@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import CreateTest from "./components/CreateTest";
 import Home from "./components/Home";
 import GlobalStyles from "./styles/GlobalStyle";
 
@@ -12,7 +13,7 @@ function App() {
           <Home/>
         </Route>
         <Route path='/create' exact>
-          <Home/>
+          <CreateTest/>
         </Route>
         <Route path='/search' exact>
           <Home/>
