@@ -35,6 +35,7 @@ export default function CreateTest(){
     },[])
 
     function changeSubject(e){
+        if(!e.target.value) return
         setTest({...test,subject:e.target.value})
         const subject = subjects.find(s=>s.name===e.target.value)
         const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/subjects/${subject.id}/professors`)
@@ -55,21 +56,21 @@ export default function CreateTest(){
                 <SelectDiv variant="outlined" margin='normal' required>
                     <InputLabel >Category</InputLabel>
                     <SelectInput label='category' value={test.category} onChange={e=>setTest({...test,category:e.target.value})} >
-                        <MenuItem  value={null}>None</MenuItem>
+                        <MenuItem  value={''}>None</MenuItem>
                         {categories?.map(c=><MenuItem key={c.id} value={c.name}>{c.name}</MenuItem>)}
                     </SelectInput>
                 </SelectDiv>
                 <SelectDiv variant="outlined" margin='normal' required>
                     <InputLabel >Materias</InputLabel>
                     <SelectInput label='Subjects' value={test.subject} onChange={changeSubject} >
-                        <MenuItem  value={null}>None</MenuItem>
+                        <MenuItem  value={''}>None</MenuItem>
                         {subjects?.map(s=><MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>)}
                     </SelectInput>
                 </SelectDiv>
-                <SelectDiv variant="outlined" margin='normal' required>
+                <SelectDiv variant="outlined" margin='normal' disabled={!test.subject} required>
                     <InputLabel >Professores</InputLabel>
                     <SelectInput label='professores' value={test.professor} onChange={e=>setTest({...test,professor:e.target.value})} >
-                        <MenuItem  value={null}>None</MenuItem>
+                        <MenuItem  value={''}>None</MenuItem>
                         {professors?.map(s=><MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>)}
                     </SelectInput>
                 </SelectDiv>
