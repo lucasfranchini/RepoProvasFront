@@ -1,8 +1,9 @@
 import { InputLabel, MenuItem, Select, TextField,FormControl } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import validateURL from "../utils/validateUrl";
 
 export default function CreateTest(){
     const [test,setTest] = useState({
@@ -15,6 +16,7 @@ export default function CreateTest(){
     const [categories,setCategories] = useState([]);
     const [subjects,setSubjects] = useState([]);
     const [professors,setProfessors] = useState([]);
+    const history = useHistory();
     useEffect(()=>{
         const res = axios.get(`${process.env.REACT_APP_API_BASE_URL}/category`)
         res.then(res=>{
@@ -46,11 +48,35 @@ export default function CreateTest(){
             alert("houve um erro ao carregar as informacoes")
         })
     }
-    console.log(test.subject)
+
+    function sendTest(e){
+        e.preventDefault();
+        const body = {
+            name:test.name,
+            link:test.link,
+            category: categories.find(c=>c.name===test.category),
+            subject: subjects.find(s=>s.name===test.subject),
+            professor: professors.find(p=>p.name===test.professor)
+        }
+        
+        if(!body.category || !body.subject || !body.professor || !validateURL(body.link)){
+            alert('por favor preencha os dados corretamente')
+            return
+        }
+
+        const promise = axios.post(`${process.env.REACT_APP_API_BASE_URL}/tests`,body)
+        promise.then(res=>{
+            history.push('/')
+        })
+        promise.catch(res=>{
+            alert("houve um erro ao salvar a prova, favor tentar novamente")
+        })
+    }
+    
     return (
         <Body>
             <Link to='/'>RepoProvas</Link>
-            <form >
+            <form onSubmit={sendTest}>
                 <Input required label='Nome' value={test.name} onChange={e=>setTest({...test,name:e.target.value})} variant="outlined" margin='normal'/>
                 <Input required label='Link' value={test.link} onChange={e=>setTest({...test,link:e.target.value})} variant="outlined" margin='normal'/>
                 <SelectDiv variant="outlined" margin='normal' required>
@@ -74,7 +100,7 @@ export default function CreateTest(){
                         {professors?.map(s=><MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>)}
                     </SelectInput>
                 </SelectDiv>
-                
+                <Button type='submit' >Enviar Prova</Button>
             </form>
         </Body>
     );
@@ -111,4 +137,19 @@ const SelectInput = styled(Select)`
 `
 const SelectDiv = styled(FormControl)`
     width: 90%;
+`
+const Button = styled.button`
+    margin-top: 15px;
+    width: 90%;
+    background-color: #fff;
+    height: 56px;
+    font-size: 25px;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    border: 1px solid #adadad;
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover{
+        background-color: #adadad;
+    }
 `
