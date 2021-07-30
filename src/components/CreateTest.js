@@ -14,6 +14,7 @@ export default function CreateTest(){
     })
     const [categories,setCategories] = useState([]);
     const [subjects,setSubjects] = useState([]);
+    const [professors,setProfessors] = useState([]);
     useEffect(()=>{
         const res = axios.get(`${process.env.REACT_APP_API_BASE_URL}/category`)
         res.then(res=>{
@@ -24,7 +25,6 @@ export default function CreateTest(){
         })
 
         const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/subjects`)
-
         promise.then(res=>{
             setSubjects(res.data)
         })
@@ -33,6 +33,18 @@ export default function CreateTest(){
         })
 
     },[])
+
+    function changeSubject(e){
+        setTest({...test,subject:e.target.value})
+        const subject = subjects.find(s=>s.name===e.target.value)
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/subjects/${subject.id}/professors`)
+        promise.then(res=>{
+            setProfessors(res.data.professors)
+        })
+        promise.catch(res=>{
+            alert("houve um erro ao carregar as informacoes")
+        })
+    }
     console.log(test.subject)
     return (
         <Body>
@@ -48,10 +60,17 @@ export default function CreateTest(){
                     </SelectInput>
                 </SelectDiv>
                 <SelectDiv variant="outlined" margin='normal' required>
-                    <InputLabel >Subjects</InputLabel>
-                    <SelectInput label='Subjects' value={test.subject} onChange={e=>setTest({...test,subject:e.target.value})} >
+                    <InputLabel >Materias</InputLabel>
+                    <SelectInput label='Subjects' value={test.subject} onChange={changeSubject} >
                         <MenuItem  value={null}>None</MenuItem>
                         {subjects?.map(s=><MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>)}
+                    </SelectInput>
+                </SelectDiv>
+                <SelectDiv variant="outlined" margin='normal' required>
+                    <InputLabel >Professores</InputLabel>
+                    <SelectInput label='professores' value={test.professor} onChange={e=>setTest({...test,professor:e.target.value})} >
+                        <MenuItem  value={null}>None</MenuItem>
+                        {professors?.map(s=><MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>)}
                     </SelectInput>
                 </SelectDiv>
                 
