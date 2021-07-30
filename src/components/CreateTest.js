@@ -22,7 +22,18 @@ export default function CreateTest(){
         res.catch(res=>{
             alert("houve um erro ao carregar as informacoes")
         })
+
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/subjects`)
+
+        promise.then(res=>{
+            setSubjects(res.data)
+        })
+        promise.catch(res=>{
+            alert("houve um erro ao carregar as informacoes")
+        })
+
     },[])
+    console.log(test.subject)
     return (
         <Body>
             <Link to='/'>RepoProvas</Link>
@@ -34,6 +45,13 @@ export default function CreateTest(){
                     <SelectInput label='category' value={test.category} onChange={e=>setTest({...test,category:e.target.value})} >
                         <MenuItem  value={null}>None</MenuItem>
                         {categories?.map(c=><MenuItem key={c.id} value={c.name}>{c.name}</MenuItem>)}
+                    </SelectInput>
+                </SelectDiv>
+                <SelectDiv variant="outlined" margin='normal' required>
+                    <InputLabel >Subjects</InputLabel>
+                    <SelectInput label='Subjects' value={test.subject} onChange={e=>setTest({...test,subject:e.target.value})} >
+                        <MenuItem  value={null}>None</MenuItem>
+                        {subjects?.map(s=><MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>)}
                     </SelectInput>
                 </SelectDiv>
                 
