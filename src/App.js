@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CreateTest from "./components/CreateTest";
-import Home from "./components/Home";
+import Options from "./components/Options";
 import GlobalStyles from "./styles/GlobalStyle";
+import Search from "./components/Search";
 
 
 function App() {
@@ -10,13 +11,16 @@ function App() {
     <GlobalStyles/>
       <Switch>
         <Route path='/' exact>
-          <Home/>
+          <Options/>
         </Route>
         <Route path='/create' exact>
           <CreateTest/>
         </Route>
-        <Route path='/search' exact>
-          <Home/>
+        <Route path='/options' exact>
+          <Options/>
+        </Route>
+        <Route path='/search/:type' exact>
+          <Search/>
         </Route>
       </Switch>
     </BrowserRouter>

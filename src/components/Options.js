@@ -1,29 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import Body from "../styles/Body";
 
-export default function Home(){
+export default function Options(){
+    const history = useHistory();
+    const path = history.location.pathname;
     return(
         <Body>
             <Link to='/'>RepoProvas</Link>
+            <h1>{path==='/options' && 'Procurar Provas'}</h1>
             <Buttons>
-                <Link to='/create'>Enviar Provas</Link>
-                <Link to='/search'>Procurar Provas</Link>
+                <Link to={path==='/options'?'/search/professors':'/create'}>{path==='/options'?'por Professores':'Enviar Provas'}</Link>
+                <Link to={path==='/options'?'/search/subjects':'/options'}>{path==='/options'?'por Materias':'Procurar Provas'}</Link>
             </Buttons>
         </Body>
     );
 }
 
-const Body = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    a{
-        font-size: 100px;
-        color: #333;
-    }
-`
 const Buttons =styled.div`
     width: 800px;
     display: flex;

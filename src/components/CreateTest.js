@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import validateURL from "../utils/validateUrl";
+import Body from "../styles/Body";
 
 export default function CreateTest(){
     const [test,setTest] = useState({
@@ -74,7 +75,7 @@ export default function CreateTest(){
     }
     
     return (
-        <Body>
+        <CreateBody>
             <Link to='/'>RepoProvas</Link>
             <form onSubmit={sendTest}>
                 <Input required label='Nome' value={test.name} onChange={e=>setTest({...test,name:e.target.value})} variant="outlined" margin='normal'/>
@@ -102,18 +103,14 @@ export default function CreateTest(){
                 </SelectDiv>
                 <Button type='submit' >Enviar Prova</Button>
             </form>
-        </Body>
+        </CreateBody>
     );
 }
 
-const Body = styled.div`
-    margin-top: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
+
+
+const CreateBody = styled(Body)`
     a{
-        font-size: 100px;
-        color: #333;
         margin-bottom: 100px;
     }
     form{
