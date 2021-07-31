@@ -6,9 +6,9 @@ const Body = styled.div`
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: #333;
     a{
         font-size: 100px;
-        color: #333;
     }
     h1{
         margin: 10px;
