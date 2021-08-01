@@ -94,7 +94,7 @@ const List = styled.ul`
     flex-wrap: wrap;
     max-width: 500px;
     justify-content: space-between;
-    gap: 20px;
+    gap: 25px;
     button{
         width: 225px;
         border:none;
