@@ -22,7 +22,6 @@ export default function Search(){
             alert('Houve um erro ao carregar os dados, tente novamente')
         })
     },[type])
-    console.log(data)
 
     function getTests(e){
         let getType;
