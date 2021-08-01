@@ -54,7 +54,7 @@ export default function Search(){
                                 d.tests?.map(t=>
                                     <Test key={t.id}>
                                         <TestLink href={t.link} target="_blank" rel="noreferrer">{t.name}</TestLink>
-                                        <Link to={`/search/${secondType}`}> - {type==='subjects' ? t.professor.name:t.subject?.name}</Link>
+                                        <span to={`/search/${secondType}`}> - {type==='subjects' ? t.professor?.name:t.subject?.name}</span>
                                     </Test>
                                     )
                             }
