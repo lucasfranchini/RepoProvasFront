@@ -8,6 +8,7 @@ export default function Search(){
     const {type} = useParams();
     const [data,setData] = useState([])
     const [tests,setTests] = useState(false)
+    const secondType = type==='subjects' ? 'professors':'subjects'
     useEffect(()=>{
         let getType;
         if(type==='subjects') getType = 'semesters';
@@ -21,10 +22,13 @@ export default function Search(){
             alert('Houve um erro ao carregar os dados, tente novamente')
         })
     },[type])
+    console.log(data)
 
     function getTests(e){
-        console.log(e.target.value)
-        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories/tests/subjects/${e.target.value}`);
+        let getType;
+        if(type==='subjects') getType = 'subject';
+        else getType = 'professor'
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories/tests/${getType}/${e.target.value}`);
         promise.then(res=>{
             setTests(true)
             setData(res.data)
@@ -50,7 +54,7 @@ export default function Search(){
                                 d.tests?.map(t=>
                                     <Test key={t.id}>
                                         <TestLink href={t.link} target="_blank" rel="noreferrer">{t.name}</TestLink>
-                                        <Link to='/search/professors'> - {t.professor.name}</Link>
+                                        <Link to={`/search/${secondType}`}> - {type==='subjects' ? t.professor.name:t.subject?.name}</Link>
                                     </Test>
                                     )
                             }
@@ -71,7 +75,11 @@ export default function Search(){
                         </Semester>
                         )
                     :
-                    data.map(d=><button key={d.id} onClick={getTests} value={d.id}>{d.name}</button>)    
+                    data.map(p=>
+                        <Professor key={p.id}>
+                            <button key={p.id} onClick={getTests} value={p.id}>{p.name}</button>
+                            <span>({p.tests.length})</span>
+                        </Professor>)  
                 }
             </List>
         </Body>
@@ -89,7 +97,6 @@ const List = styled.ul`
     justify-content: space-between;
     gap: 20px;
     button{
-        margin-top:10px;
         width: 225px;
         border:none;
         cursor: pointer;
@@ -116,7 +123,7 @@ const Test = styled.div`
     width:500px;
     display:flex;
     justify-content: center;
-    margin:10px;
+    margin:15px;
     font-size: 18px;
     color: #444;
     a{
@@ -132,8 +139,12 @@ const Subject = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top:10px;
     span{
         font-size:13px;
         color: #444;
     }
+`
+const Professor = styled(Subject)`
+    width:200px;
 `
