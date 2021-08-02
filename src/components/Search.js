@@ -3,36 +3,44 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import styled from "styled-components"
 import Body from "../styles/Body";
+import loadimg from "../assets/load.gif"
 
 export default function Search(){
     const {type} = useParams();
-    const [data,setData] = useState([])
-    const [tests,setTests] = useState(false)
+    const [data,setData] = useState([]);
+    const [tests,setTests] = useState(false);
+    const [load,setLoad] = useState(false);
     const secondType = type==='subjects' ? 'professors':'subjects'
     useEffect(()=>{
+        setLoad(true)
         let getType;
         if(type==='subjects') getType = 'semesters';
         else getType = 'professors'
         console.log()
         const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/${getType}/complete`)
         promise.then(res=>{
+            setLoad(false)
             setData(res.data)
         });
         promise.catch(()=>{
+            setLoad(false)
             alert('Houve um erro ao carregar os dados, tente novamente')
         })
     },[type])
 
     function getTests(e){
+        setLoad(true);
         let getType;
         if(type==='subjects') getType = 'subject';
         else getType = 'professor'
         const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories/tests/${getType}/${e.target.value}`);
         promise.then(res=>{
+            setLoad(false)
             setTests(true)
             setData(res.data)
         });
         promise.catch(()=>{
+            setLoad(false)
             alert('Houve um erro ao carregar os dados, tente novamente')
         })
 
@@ -42,7 +50,11 @@ export default function Search(){
         <Body>
             <Link to='/'>RepoProvas</Link>
             <h1>Procurar Provas</h1>
-            <List>
+            {
+                load?
+                <img src={loadimg} alt='load'/>
+                :
+                <List>
                 {
                     tests
                     ? 
@@ -80,7 +92,8 @@ export default function Search(){
                             <span>({p.tests.length})</span>
                         </Professor>)  
                 }
-            </List>
+                </List>
+            }
         </Body>
     )
 }
@@ -106,6 +119,9 @@ const List = styled.ul`
     }
     h1{
         font-size: 20px;
+    }
+    img{
+        width:200px;
     }
 `
 const Semester = styled.div`
